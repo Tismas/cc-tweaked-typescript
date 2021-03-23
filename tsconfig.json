@@ -5,9 +5,14 @@
     "lib": ["esnext"],
     "moduleResolution": "node",
     "types": ["lua-types/jit"],
+    "esModuleInterop": true,
     "strict": true
   },
   "tstl": {
-    "luaTarget": "JIT"
+    "luaTarget": "5.1",
+    "luaBundleEntry": "./src/example.ts",
+    "luaBundle": "./dist/bundle.lua",
+    "luaLibImport": "inline",
+    "noImplicitSelf": true
   }
 }
