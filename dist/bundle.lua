@@ -19,17 +19,6 @@ local function require(file)
 end
 ____modules = {
 [".src.utils"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
--- Lua Library inline imports
-function __TS__StringIncludes(self, searchString, position)
-    if not position then
-        position = 1
-    else
-        position = position + 1
-    end
-    local index = string.find(self, searchString, position, true)
-    return index ~= nil
-end
-
 local ____exports = {}
 local Direction = Direction or ({})
 Direction.positiveX = 0
@@ -72,43 +61,58 @@ function ____exports.goTo(position)
                 turtle.forward()
             end
         elseif math.abs(posDiff.x) >= 1 then
+            local canMove
             if posDiff.x > 0 then
                 rotateTowards(Direction.positiveX)
-                turtle.forward()
+                canMove = turtle.forward()
             else
                 rotateTowards(Direction.negativeX)
-                turtle.forward()
+                canMove = turtle.forward()
+            end
+            if (not canMove) and (math.abs(posDiff.x) == 1) then
+                break
             end
         end
     end
     local solidBlockInFront, blockInfo = turtle.inspect()
-    return solidBlockInFront and __TS__StringIncludes(blockInfo, "logs")
+    return ((solidBlockInFront and blockInfo) and blockInfo.tags) and blockInfo.tags["minecraft:logs"]
 end
 return ____exports
 end,
 [".src.cut_simple_tree"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
-local ____utils = require("src.utils")
+local ____utils = require(".src.utils")
 local goTo = ____utils.goTo
 local chestLocation = vector.new(144, 70, -276)
 local treeLocations = {
     vector.new(142, -274, 71),
     vector.new(142, -279, 71),
-    vector.new(147, -274, 71),
-    vector.new(147, -279, 71)
+    vector.new(147, -279, 71),
+    vector.new(147, -274, 71)
 }
-local function cutTree(position)
+local function cutTree()
+    turtle.dig()
+    turtle.forward()
+    local height = 0
+    while ({
+        turtle.inspectUp()
+    })[1] do
+        turtle.digUp()
+        turtle.up()
+        height = height + 1
+    end
 end
 for ____, treeLocation in ipairs(treeLocations) do
     if goTo(treeLocation) then
-        cutTree(treeLocation)
+        cutTree()
+        goTo(treeLocation)
     end
 end
 return ____exports
 end,
 [".src.example"] = function() --[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 local ____exports = {}
-local ____utils = require("src.utils")
+local ____utils = require(".src.utils")
 local goTo = ____utils.goTo
 goTo(
     vector.new(139, -277, 71)
@@ -116,4 +120,4 @@ goTo(
 return ____exports
 end,
 }
-return require(".src.example")
+return require(".src.cut_simple_tree")

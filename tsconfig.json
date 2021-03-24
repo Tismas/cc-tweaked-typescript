@@ -10,7 +10,7 @@
   },
   "tstl": {
     "luaTarget": "5.1",
-    "luaBundleEntry": "./src/example.ts",
+    "luaBundleEntry": "./src/cut_simple_tree.ts",
     "luaBundle": "./dist/bundle.lua",
     "luaLibImport": "inline",
     "noImplicitSelf": true

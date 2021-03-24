@@ -1,6 +1,12 @@
 /** @noSelfInFile */
+interface BlockInfo {
+  name?: string;
+  state?: Record<string, any>;
+  tags?: Record<string, any>;
+}
+
 declare module turtle {
-  type ReturnStatus = [boolean, string];
+  type ReturnStatus = [boolean, BlockInfo?];
   enum tool {
     left = "left",
     right = "right",

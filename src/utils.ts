@@ -67,16 +67,25 @@ export function goTo(position: Vector): boolean {
     }
     // x
     else if (Math.abs(posDiff.x) >= 1) {
+      let canMove;
       if (posDiff.x > 0) {
         rotateTowards(Direction.positiveX);
-        turtle.forward();
+        [canMove] = turtle.forward();
       } else {
         rotateTowards(Direction.negativeX);
-        turtle.forward();
+        [canMove] = turtle.forward();
+      }
+      if (!canMove && Math.abs(posDiff.x) === 1) {
+        break;
       }
     }
   }
 
   const [solidBlockInFront, blockInfo] = turtle.inspect();
-  return solidBlockInFront && blockInfo.includes("logs");
+  return (
+    solidBlockInFront &&
+    blockInfo &&
+    blockInfo.tags &&
+    blockInfo.tags["minecraft:logs"]
+  );
 }
